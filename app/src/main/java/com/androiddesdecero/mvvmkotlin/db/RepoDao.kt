@@ -1,6 +1,8 @@
 package com.androiddesdecero.mvvmkotlin.db
 
+import android.util.SparseIntArray
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -8,6 +10,7 @@ import androidx.room.Query
 import com.androiddesdecero.mvvmkotlin.model.Contributor
 import com.androiddesdecero.mvvmkotlin.model.Repo
 import com.androiddesdecero.mvvmkotlin.model.RepoSearchResult
+import java.util.*
 
 @Dao
 abstract class RepoDao {
@@ -37,6 +40,21 @@ abstract class RepoDao {
 
     @Query("SELECT * FROM RepoSearchResult WHERE `query` = :query")
     abstract fun search(query: String): LiveData<RepoSearchResult>
+
+    fun loadOrdered(repoIds: List<Int>): LiveData<List<Repo>>{
+        val order = SparseIntArray()
+        repoIds.withIndex().forEach{
+            order.put(it.value, it.index)
+        }
+        return Transformations.map(loadById(repoIds)){repositories->
+            Collections.sort(repositories){r1, r2->
+                val pos1 = order.get(r1.id)
+                val pos2 = order.get(r2.id)
+                pos1 - pos2
+            }
+            repositories
+        }
+    }
 
     @Query("SELECT * FROM repo WHERE id in(:repoIds)")
     protected abstract fun loadById(repoIds: List<Int>): LiveData<List<Repo>>
