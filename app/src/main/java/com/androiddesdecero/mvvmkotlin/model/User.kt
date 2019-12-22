@@ -1,7 +1,9 @@
 package com.androiddesdecero.mvvmkotlin.model
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
+@Entity(primaryKeys = ["login"])
 data class User(
 
     @field:SerializedName("login")
