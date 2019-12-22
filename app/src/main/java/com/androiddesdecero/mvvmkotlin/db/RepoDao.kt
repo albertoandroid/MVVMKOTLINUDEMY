@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.androiddesdecero.mvvmkotlin.model.Contributor
 import com.androiddesdecero.mvvmkotlin.model.Repo
+import com.androiddesdecero.mvvmkotlin.model.RepoSearchResult
 
 @Dao
 abstract class RepoDao {
@@ -27,4 +28,19 @@ abstract class RepoDao {
 
     @Query("SELECT login, avatarUrl, repoName, repoOwner, contributions FROM contributor WHERE repoName = :name AND repoOwner = :owner ORDER BY contributions DESC")
     abstract fun loadContributors(owner: String, name: String): LiveData<List<Contributor>>
+
+    @Query("SELECT * FROM repo WHERE owner_login = :owner ORDER BY stars DESC")
+    abstract fun loadRepositories(owner: String): LiveData<List<Repo>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insert(result: RepoSearchResult)
+
+    @Query("SELECT * FROM RepoSearchResult WHERE `query` = :query")
+    abstract fun search(query: String): LiveData<RepoSearchResult>
+
+    @Query("SELECT * FROM repo WHERE id in(:repoIds)")
+    protected abstract fun loadById(repoIds: List<Int>): LiveData<List<Repo>>
+
+    @Query("SELECT * FROM RepoSearchResult WHERE `query` = :query")
+    abstract fun findSearchResult(query: String): RepoSearchResult?
 }
