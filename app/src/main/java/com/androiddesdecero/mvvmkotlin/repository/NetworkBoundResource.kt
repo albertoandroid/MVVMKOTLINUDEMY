@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.androiddesdecero.mvvmkotlin.AppExecutors
 import com.androiddesdecero.mvvmkotlin.api.ApiEmptyResponse
+import com.androiddesdecero.mvvmkotlin.api.ApiErrorResponse
 import com.androiddesdecero.mvvmkotlin.api.ApiResponse
 import com.androiddesdecero.mvvmkotlin.api.ApiSuccessResponse
 
@@ -64,7 +65,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                 is ApiEmptyResponse->{
                     onFetchFailed()
                     result.addSource(dbSource){newData->
-                        setValue(Resource.error(response, newData))
+                        setValue(Resource.error((response as ApiErrorResponse).errorMessage, newData))
                     }
                 }
             }
