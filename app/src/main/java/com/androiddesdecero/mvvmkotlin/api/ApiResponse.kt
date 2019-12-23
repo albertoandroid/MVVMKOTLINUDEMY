@@ -1,5 +1,6 @@
 package com.androiddesdecero.mvvmkotlin.api
 
+import java.lang.NumberFormatException
 import java.util.regex.Pattern
 
 sealed class ApiResponse<T> {
@@ -13,6 +14,22 @@ data class ApiSuccessResponse<T>(
         body = body,
         links = linksHeaders?.extractLinks()?: emptyMap()
     )
+
+    val nextPage: Int? by lazy ( LazyThreadSafetyMode.NONE ){
+        links[NEXT_LINK]?.let{
+            next->
+            val matcher = PAGE_PATTERN.matcher(next)
+            if(!matcher.find() || matcher.groupCount() != 1){
+                null
+            }else{
+                try {
+                    Integer.parseInt(matcher.group(1))
+                }catch (ex: NumberFormatException){
+                    null
+                }
+            }
+        }
+    }
 
     companion object{
         private val LINK_PATTERN = Pattern.compile("<([^>]*)>[\\s]*;[\\s]*rel=\"([a-zA-Z0-9]+)\"")
