@@ -6,6 +6,7 @@ import com.androiddesdecero.mvvmkotlin.api.ApiResponse
 import com.androiddesdecero.mvvmkotlin.api.GithubApi
 import com.androiddesdecero.mvvmkotlin.db.GithubDb
 import com.androiddesdecero.mvvmkotlin.db.RepoDao
+import com.androiddesdecero.mvvmkotlin.model.Contributor
 import com.androiddesdecero.mvvmkotlin.model.Repo
 import com.androiddesdecero.mvvmkotlin.utils.RateLimiter
 import java.security.acl.Owner
@@ -62,6 +63,39 @@ class RepoRepository @Inject constructor(
                 owner = owner,
                 name = name
             )
+
+        }.asLiveData()
+    }
+
+    fun loadContributors(owner: String, name: String): LiveData<Resource<List<Contributor>>>{
+        return object: NetworkBoundResource<List<Contributor>, List<Contributor>>(appExecutors){
+            override fun saveCallResult(item: List<Contributor>) {
+                item.forEach {
+                    it.repoName = name
+                    it.repoOwner = owner
+                }
+                db.runInTransaction{
+                    repoDao.createRepoIfNoExists(
+                        Repo(
+                            id = Repo.UNKOWN_ID,
+                            name = name,
+                            fullName = "$owner/$name",
+                            description = "",
+                            owner = Repo.Owner(owner, null),
+                            stars = 0
+                        )
+                    )
+                    repoDao.insertContributors(item)
+                }
+            }
+
+            override fun shouldFetch(data: List<Contributor>?): Boolean {
+                return data == null || data.isEmpty()
+            }
+
+            override fun loadFromDb(): LiveData<List<Contributor>> = repoDao.loadContributors(owner, name)
+
+            override fun createCall(): LiveData<ApiResponse<List<Contributor>>> = githubApi.getContributors(owner, name)
 
         }.asLiveData()
     }
