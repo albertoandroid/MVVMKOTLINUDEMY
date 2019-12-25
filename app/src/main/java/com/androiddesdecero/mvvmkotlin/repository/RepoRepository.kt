@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class 31º @Inject constructor(
+class RepoRepository @Inject constructor(
     private val appExecutors: AppExecutors,
     private val db: GithubDb,
     private val repoDao: RepoDao,
