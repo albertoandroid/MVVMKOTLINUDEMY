@@ -9,7 +9,7 @@ import com.androiddesdecero.mvvmkotlin.AppExecutors
 
 abstract class DataBoundListAdapter<T,V: ViewDataBinding>(
     appExecutors: AppExecutors,
-    diffCallback: DiffUtil.ItemCallback<T>): ListAdapter<T, DataBoundViewHolder<T>>(
+    diffCallback: DiffUtil.ItemCallback<T>): ListAdapter<T, DataBoundViewHolder<V>>(
     AsyncDifferConfig.Builder<T>(diffCallback)
         .setBackgroundThreadExecutor(appExecutors.diskIO())
         .build()
