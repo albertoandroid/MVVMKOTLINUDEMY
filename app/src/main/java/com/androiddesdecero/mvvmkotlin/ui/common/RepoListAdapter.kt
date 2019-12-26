@@ -10,7 +10,7 @@ import com.androiddesdecero.mvvmkotlin.R
 import com.androiddesdecero.mvvmkotlin.databinding.RepoItemBinding
 import com.androiddesdecero.mvvmkotlin.model.Repo
 
-class 5(
+class RepoListAdapter(
     private val dataBindingComponent: DataBindingComponent,
     appExecutors: AppExecutors,
     private val showFullName: Boolean,
