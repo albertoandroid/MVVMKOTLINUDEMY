@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             app:cardUseCompatPadding="true">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -61,6 +61,6 @@
                     android:drawableStart="@android:drawable/btn_star"
                     android:drawableLeft="@android:drawable/btn_star"
                     android:layout_marginLeft="@dimen/default_margin" />
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
