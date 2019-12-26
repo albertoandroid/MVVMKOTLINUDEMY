@@ -1,16 +1,55 @@
 package com.androiddesdecero.mvvmkotlin.ui.search
 
 import android.app.DownloadManager
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import com.androiddesdecero.mvvmkotlin.model.Repo
 import com.androiddesdecero.mvvmkotlin.repository.RepoRepository
 import com.androiddesdecero.mvvmkotlin.repository.Resource
 import com.androiddesdecero.mvvmkotlin.repository.Status
+import com.androiddesdecero.mvvmkotlin.utils.AbsentLiveData
+import java.util.*
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(repoRepository: RepoRepository): ViewModel() {
+
+    private val query = MutableLiveData<String>()
+    private val nextPageHandler = NextPageHandler(repoRepository)
+
+    val result: LiveData<Resource<List<Repo>>> = Transformations
+        .switchMap(query){search->
+            if(search.isNullOrBlank()){
+                AbsentLiveData.create()
+            }else{
+                repoRepository.search(search)
+            }
+        }
+
+    val loadMoreStatus: LiveData<LoadMoreState>
+        get() = nextPageHandler.loadMoreState
+
+    fun setQuery(originalInput: String){
+        val input = originalInput.toLowerCase(Locale.getDefault()).trim()
+        if(input == query.value){
+            return
+        }
+        nextPageHandler.reset()
+        query.value =  input
+    }
+
+    fun loadNextPage(){
+        query.value?.let {
+            if(it.isNotBlank()){
+                nextPageHandler.queryNextPage(it)
+            }
+        }
+    }
+
+    fun refresh(){
+        query.value?.let {
+            query.value = it
+        }
+    }
 
 
     class LoadMoreState(val isRunning: Boolean, val errorMessage: String?){
