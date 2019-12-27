@@ -31,5 +31,6 @@ class AutoClearedValue<T: Any>(val fragment: Fragment): ReadWriteProperty<Fragme
         _value = value
     }
 
-    fun <T: Any> Fragment.autoClared() = AutoClearedValue<T>(this)
 }
+
+fun <T: Any> Fragment.autoCleared() = AutoClearedValue<T>(this)
