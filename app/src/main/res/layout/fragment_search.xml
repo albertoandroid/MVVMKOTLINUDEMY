@@ -30,6 +30,10 @@
                 type="Resource" />
 
         <variable
+                name="searchResult"
+                type="androidx.lifecycle.LiveData&lt;Resource&lt;List&lt;Repo>>>" />
+
+        <variable
                 name="callback"
                 type="com.androiddesdecero.mvvmkotlin.ui.common.RetryCallback" />
     </data>
@@ -89,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{@string/empty_search_result(query)}"
                 android:id="@+id/no_results_text"
-                app:visibleGone="@{searchResource.status == Status.SUCCESS &amp;&amp; resultCount == 0}"
+                app:visibleGone="@{searchResult.status == Status.SUCCESS &amp;&amp; searchResult.data.size == 0}"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
