@@ -2,11 +2,13 @@ package com.androiddesdecero.mvvmkotlin.ui.repo
 
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingComponent
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +19,7 @@ import com.androiddesdecero.mvvmkotlin.R
 import com.androiddesdecero.mvvmkotlin.binding.FragmentDataBindingComponent
 import com.androiddesdecero.mvvmkotlin.databinding.FragmentRepoBinding
 import com.androiddesdecero.mvvmkotlin.di.Injectable
+import com.androiddesdecero.mvvmkotlin.generated.callback.RetryCallback
 import com.androiddesdecero.mvvmkotlin.utils.autoCleared
 import java.lang.NumberFormatException
 import javax.inject.Inject
@@ -51,14 +54,30 @@ class RepoFragment : Fragment(), Injectable {
         })
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_repo, container, false)
+        //return inflater.inflate(R.layout.fragment_repo, container, false)
+
+        val dataBinding = DataBindingUtil.inflate<FragmentRepoBinding>(
+            inflater,
+            R.layout.fragment_repo,
+            container,
+            false
+        )
+
+        dataBinding.retryCallback = object : RetryCallback{
+            override fun retry() {
+                repoViewModel.retry()
+            }
+        }
+
+        binding = dataBinding
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
+
+        return dataBinding.root
     }
 
 
