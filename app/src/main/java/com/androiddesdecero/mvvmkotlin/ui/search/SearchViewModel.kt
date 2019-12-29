@@ -15,6 +15,7 @@ class SearchViewModel @Inject constructor(repoRepository: RepoRepository): ViewM
 
     private val query = MutableLiveData<String>()
     private val nextPageHandler = NextPageHandler(repoRepository)
+    val queryLD: LiveData<String> = query
 
     val result: LiveData<Resource<List<Repo>>> = Transformations
         .switchMap(query){search->

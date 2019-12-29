@@ -69,7 +69,7 @@ class SearchFragment : Fragment(), Injectable {
                 SearchFragmentDirections.actionSearchFragmentToRepoFragment(repo.name, repo.owner.login)
             )
         }
-        binding.query = searchViewModel.query
+        binding.query = searchViewModel.queryLD
         binding.repoList.adapter = rvAdapter
         adapter = rvAdapter
 

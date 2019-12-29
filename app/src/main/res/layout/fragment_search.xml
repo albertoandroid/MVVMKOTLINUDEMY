@@ -19,7 +19,7 @@
 
         <variable
                 name="query"
-                type="String" />
+                type="androidx.lifecycle.LiveData&lt;String>" />
 
         <variable
                 name="loadingMore"
