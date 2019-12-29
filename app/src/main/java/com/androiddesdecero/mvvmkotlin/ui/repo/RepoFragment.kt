@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.androiddesdecero.mvvmkotlin.AppExecutors
 
@@ -78,6 +79,29 @@ class RepoFragment : Fragment(), Injectable {
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
 
         return dataBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val params = RepoFragmentArgs.fromBundle(arguments!!)
+        repoViewModel.setId(params.owner, params.name)
+        binding.setLifecycleOwner (viewLifecycleOwner)
+        binding.repo = repoViewModel.repo
+
+        val adapter = ContributorAdapter(dataBindingComponent, appExecutors){
+            contributor ->
+            findNavController().navigate(
+                RepoFragmentDirections.actionRepoFragmentToUserFragment(contributor.login, contributor.avatarUrl)
+            )
+        }
+
+        this.adapter = adapter
+        binding.contributorList.adapter = adapter
+        postponeEnterTransition()
+        binding.contributorList.viewTreeObserver.addOnPreDrawListener {
+            startPostponedEnterTransition()
+            true
+        }
+        initContributorList(repoViewModel)
     }
 
 

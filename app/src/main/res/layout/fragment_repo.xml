@@ -9,9 +9,14 @@
 
         <import type="com.androiddesdecero.mvvmkotlin.repository.Resource" />
 
+        <import type="com.androiddesdecero.mvvmkotlin.model.Repo" />
+
+
+
         <variable
                 name="repo"
-                type="com.androiddesdecero.mvvmkotlin.model.Repo" />
+                type="androidx.lifecycle.LiveData&lt;Resource&lt;Repo>>" />
+
 
         <variable
                 name="repoResource"
@@ -40,8 +45,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                app:visibleGone="@{repo != null}"
-                android:text="@{@string/repo_full_name(repo.owner.login, repo.name)}"
+                app:visibleGone="@{repo.data != null}"
+                android:text="@{@string/repo_full_name(repo.data.owner.login, repo.data.name)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="name of the user" />
@@ -54,8 +59,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                app:visibleGone="@{repo != null}"
-                android:text="@{repo.description}"
+                app:visibleGone="@{repo.data != null}"
+                android:text="@{repo.data.description}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name"
                 tools:text="description of the user" />
