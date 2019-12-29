@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.androiddesdecero.mvvmkotlin.AppExecutors
 
@@ -68,10 +70,41 @@ class UserFragment : Fragment(), Injectable {
         }
         binding = dataBinding
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
-        
+
         postponeEnterTransition()
         return  dataBinding.root
     }
 
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val params = UserFragmentArgs.fromBundle(arguments!!)
+        userViewModel.setLogin(params.login)
+        userViewModel.user.observe(this, Observer {
+            userResource ->
+            binding.user = userResource?.data
+            binding.userResource = userResource
+        })
+
+        val rvAdapter = RepoListAdapter(
+            dataBindingComponent = dataBindingComponent,
+            appExecutors = appExecutors,
+            showFullName = false
+        ){
+            repo->
+            findNavController().navigate(UserFragmentDirections.actionUserFragmentToRepoFragment(repo.owner.login, repo.name))
+        }
+        binding.repoList.adapter = rvAdapter
+        this.adapter = rvAdapter
+        initRepoList()
+
+    }
+
+    private fun initRepoList(){
+        userViewModel.repositories.observe(this, Observer {
+            repos->
+            adapter.submitList(repos?.data)
+        })
+    }
 
 }
