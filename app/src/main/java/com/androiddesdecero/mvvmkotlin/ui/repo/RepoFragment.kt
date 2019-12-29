@@ -19,7 +19,7 @@ import com.androiddesdecero.mvvmkotlin.R
 import com.androiddesdecero.mvvmkotlin.binding.FragmentDataBindingComponent
 import com.androiddesdecero.mvvmkotlin.databinding.FragmentRepoBinding
 import com.androiddesdecero.mvvmkotlin.di.Injectable
-import com.androiddesdecero.mvvmkotlin.generated.callback.RetryCallback
+import com.androiddesdecero.mvvmkotlin.ui.common.RetryCallback
 import com.androiddesdecero.mvvmkotlin.utils.autoCleared
 import java.lang.NumberFormatException
 import javax.inject.Inject
@@ -68,7 +68,7 @@ class RepoFragment : Fragment(), Injectable {
             false
         )
 
-        dataBinding.retryCallback = object : RetryCallback{
+        dataBinding.retryCallback = object : RetryCallback {
             override fun retry() {
                 repoViewModel.retry()
             }
