@@ -2,10 +2,12 @@ package com.androiddesdecero.mvvmkotlin.ui.search
 
 
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -81,6 +83,28 @@ class SearchFragment : Fragment(), Injectable {
             }
         }
     }
+
+    private fun initSearchInputListener(){
+        binding.input.setOnEditorActionListener{view: View, actionId: Int, _: KeyEvent?->
+            if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                doSearch(view)
+                true
+            } else {
+                false
+            }
+        }
+
+        binding.input.setOnKeyListener{view: View, keyCode: Int, event: KeyEvent->
+            if(event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                doSearch(view)
+                true
+            }else{
+                false
+            }
+        }
+    }
+
+
 
 
 
