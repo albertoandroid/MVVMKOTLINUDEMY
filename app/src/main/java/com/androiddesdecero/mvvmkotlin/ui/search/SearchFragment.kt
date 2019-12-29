@@ -4,6 +4,7 @@ package com.androiddesdecero.mvvmkotlin.ui.search
 import android.content.Context
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,12 +12,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.androiddesdecero.mvvmkotlin.AppExecutors
 
 import com.androiddesdecero.mvvmkotlin.R
@@ -118,6 +123,37 @@ class SearchFragment : Fragment(), Injectable {
     private fun dismissKeyboard(windowToken: IBinder){
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         imm?.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    private fun initRecyclerView(){
+        binding.repoList.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastPosition = layoutManager.findLastVisibleItemPosition()
+                if(lastPosition == adapter.itemCount - 1){
+                    searchViewModel.loadNextPage()
+                }
+            }
+        })
+
+        binding.searchResult = searchViewModel.result
+        searchViewModel.result.observe(viewLifecycleOwner, Observer{
+            result->
+            adapter.submitList(result?.data)
+        })
+
+        searchViewModel.loadMoreStatus.observe(viewLifecycleOwner, Observer {
+            loadinMore->
+            if(loadinMore == null){
+                binding.loadingMore = false
+            } else {
+                binding.loadingMore = loadinMore.isRunning
+                val error = loadinMore.errorMessageIfNotHandled
+                if(error != null){
+                    Log.d("TAG1", "Error")
+                }
+            }
+        })
     }
 
 
