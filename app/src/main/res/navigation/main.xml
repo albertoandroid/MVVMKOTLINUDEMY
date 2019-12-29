@@ -3,20 +3,35 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/main" app:startDestination="@id/searchFragment">
 
-    <fragment android:id="@+id/searchFragment" android:name="com.androiddesdecero.mvvmkotlin.ui.search.SearchFragment"
+    <fragment android:id="@+id/searchFragment"
+              android:name="com.androiddesdecero.mvvmkotlin.ui.search.SearchFragment"
               android:label="SearchFragment">
         <action
                 android:id="@+id/action_searchFragment_to_repoFragment"
                 app:destination="@id/repoFragment"/>
     </fragment>
-    <fragment android:id="@+id/userFragment" android:name="com.androiddesdecero.mvvmkotlin.ui.user.UserFragment"
+    <fragment android:id="@+id/userFragment"
+              android:name="com.androiddesdecero.mvvmkotlin.ui.user.UserFragment"
               android:label="UserFragment">
         <action android:id="@+id/action_userFragment_to_repoFragment"
                 app:destination="@id/repoFragment"/>
+        <argument android:name="avatarUrl"
+                  app:argType="string"
+                  app:nullable="true"
+                  android:defaultValue="@null"/>
+        <argument android:name="login"
+                  app:argType="string"/>
     </fragment>
-    <fragment android:id="@+id/repoFragment" android:name="com.androiddesdecero.mvvmkotlin.ui.repo.RepoFragment"
+    <fragment android:id="@+id/repoFragment"
+              android:name="com.androiddesdecero.mvvmkotlin.ui.repo.RepoFragment"
               android:label="RepoFragment">
         <action android:id="@+id/action_repoFragment_to_userFragment"
                 app:destination="@id/userFragment"/>
+        <argument
+                android:name="name"
+                app:argType="string"/>
+        <argument
+                android:name="owner"
+                app:argType="string"/>
     </fragment>
 </navigation>
