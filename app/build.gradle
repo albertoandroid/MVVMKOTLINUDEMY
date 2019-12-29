@@ -57,6 +57,7 @@ dependencies {
     //Room
     implementation "androidx.room:room-runtime:2.2.3"
     annotationProcessor "androidx.room:room-compiler:2.2.3"
+    kapt 'android.arch.persistence.room:compiler:2.2.3'
 
     //Dagger
     implementation 'com.google.dagger:dagger:2.22.1'
