@@ -90,7 +90,7 @@ class RepoFragment : Fragment(), Injectable {
         val adapter = ContributorAdapter(dataBindingComponent, appExecutors){
             contributor ->
             findNavController().navigate(
-                RepoFragmentDirections.actionRepoFragmentToUserFragment(contributor.login, contributor.avatarUrl)
+                RepoFragmentDirections.actionRepoFragmentToUserFragment(contributor.avatarUrl, contributor.login)
             )
         }
 

@@ -13,7 +13,7 @@ import retrofit2.http.Query
 
 interface GithubApi {
 
-    @GET("user/{login}")
+    @GET("users/{login}")
     fun getUser(@Path("login") login: String): LiveData<ApiResponse<User>>
 
     @GET("users/{login}/repos")
