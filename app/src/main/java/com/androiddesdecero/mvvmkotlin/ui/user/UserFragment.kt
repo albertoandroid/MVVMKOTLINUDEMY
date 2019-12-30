@@ -69,9 +69,9 @@ class UserFragment : Fragment(), Injectable {
             }
         }
         binding = dataBinding
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
+        //sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
 
-        postponeEnterTransition()
+        //postponeEnterTransition()
         return  dataBinding.root
     }
 
@@ -92,7 +92,7 @@ class UserFragment : Fragment(), Injectable {
             showFullName = false
         ){
             repo->
-            findNavController().navigate(UserFragmentDirections.actionUserFragmentToRepoFragment(repo.owner.login, repo.name))
+            findNavController().navigate(UserFragmentDirections.actionUserFragmentToRepoFragment(repo.name, repo.owner.login))
         }
         binding.repoList.adapter = rvAdapter
         this.adapter = rvAdapter

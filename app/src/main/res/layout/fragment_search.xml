@@ -103,7 +103,7 @@
 
         <include
                 layout="@layout/loading_state"
-                app:resource="@{searchResource}"
+                app:resource="@{(Resource) searchResult}"
                 app:callback="@{() -> callback.retry()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

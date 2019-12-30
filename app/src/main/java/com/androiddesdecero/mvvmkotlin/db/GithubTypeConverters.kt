@@ -23,6 +23,6 @@ object GithubTypeConverters {
     @TypeConverter
     @JvmStatic
     fun intListToString(ints: List<Int>?): String? {
-        return ints?.joinToString { "," }
+        return ints?.joinToString ( "," )
     }
 }

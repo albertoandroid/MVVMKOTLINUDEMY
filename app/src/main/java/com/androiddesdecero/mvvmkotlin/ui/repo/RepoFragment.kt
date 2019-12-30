@@ -76,7 +76,7 @@ class RepoFragment : Fragment(), Injectable {
         }
 
         binding = dataBinding
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
+        //sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
 
         return dataBinding.root
     }
@@ -96,11 +96,12 @@ class RepoFragment : Fragment(), Injectable {
 
         this.adapter = adapter
         binding.contributorList.adapter = adapter
-        postponeEnterTransition()
-        binding.contributorList.viewTreeObserver.addOnPreDrawListener {
+        //postponeEnterTransition()
+
+        /*binding.contributorList.viewTreeObserver.addOnPreDrawListener {
             startPostponedEnterTransition()
             true
-        }
+        }*/
         initContributorList(repoViewModel)
     }
 

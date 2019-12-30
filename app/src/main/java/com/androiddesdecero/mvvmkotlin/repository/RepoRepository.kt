@@ -125,13 +125,11 @@ class RepoRepository @Inject constructor(
                     totalCount = item.total,
                     next = item.nextPage
                 )
-                db.beginTransaction()
-                try {
+                db.runInTransaction {
                     repoDao.insertRepos(item.items)
                     repoDao.insert(repoSearchResult)
-                } finally {
-                    db.endTransaction()
                 }
+
             }
 
             override fun shouldFetch(data: List<Repo>?): Boolean = data == null
